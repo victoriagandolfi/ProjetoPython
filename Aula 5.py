@@ -237,3 +237,37 @@ for nome in range(3):
 for nome_conteudo in nomes:
     print(nome_conteudo)
 """
+
+""" Exercicio 19- Lista
+lista1 = [23, 3, 10, 100, 9000]"""
+
+# for listinha in lista1:
+#     print(listinha)
+
+"""for listinha in lista1:
+    if listinha > 3:
+        print(listinha)"""
+
+"""for listinha in lista1:
+    if listinha % 2 == 0:
+        print(listinha)"""
+
+"""total = 0
+
+for listinha in lista1:
+    total += listinha
+
+print("A soma dos números listados é {}.".format(total))"""
+
+"""lista2 = []
+
+for algoritmos in range(10):
+    listinha = int(input("Insira um número: "))
+    lista2.append(listinha)
+    quantidade = len(lista2)
+    print(quantidade)
+
+(ATÉ ITEM 15)"""
+
+
+
