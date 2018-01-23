@@ -2,7 +2,7 @@ candidatos = [
     {
         "nome": "Camila Campos",
         "partido": "PMDB",
-        "cargo": "prefeita",
+        "cargo": "prefeita(o)",
         "vice": "Michel Temer",
         "numero": "15",
         "votação": [],
@@ -68,16 +68,33 @@ def exibir_contagem():
     return total_votos
 
 
-def exibir_resultado(total_votos):
-    for candidato in candidatos:
-        percentagem = len(candidato["votação"])/total_votos
-        print("{}: {}% do total de votos válidos da eleição.".format(candidato["nome"], percentagem))
-        percentagem_votos.append(percentagem)
-        for percentagens in percentagem_votos:
-            if percentagens > total_votos / 2:
-                print("O vencedor da eleição é {} ({}) com um total de {} votos válidos.".format(candidato["nome"], candidato["partido"], candidato[""]))
-            else:
-                pass
+def exibir_resultado():
+    total_votos = exibir_contagem()
+    vencedor = None
+    primeiro_lugar = None
+    segundo_lugar = None
+    if total_votos == 0:
+        print("Ninguém votou. Refaça a eleição")
+    else:
+        primeiro_lugar = None
+        segundo_lugar = None
+        for candidato in candidatos:
+            percentagem = (len(candidato["votação"])/total_votos) * 100
+            print("{}: {}% do total de votos válidos da eleição.".format(candidato["nome"], percentagem))
+            if percentagem > 50.0:
+                 vencedor = candidato
+            elif not primeiro_lugar or (len(candidato["votação"]) > len(primeiro_lugar["votação"])):
+                segundo_lugar = primeiro_lugar
+                primeiro_lugar = candidato
+            elif not segundo_lugar or (len(candidato["votação"]) > len(segundo_lugar["votação"])):
+                segundo_lugar = candidato
+
+        print()
+
+        if vencedor != None:
+            print("O vencedor da eleição é {} ({}) com um total de {} votos válidos.".format(vencedor["nome"], vencedor["partido"],len(vencedor["votação"])))
+        else:
+            print("Não houve vencedor. Terá segundo turno entre os candidatos {} ({}) e {} ({}) para o cargo de {}.".format(primeiro_lugar["nome"], primeiro_lugar["partido"], segundo_lugar["nome"], segundo_lugar["partido"], primeiro_lugar["cargo"]))
 
 
 def exibir_total():
@@ -101,8 +118,6 @@ def pegar_voto(voto):
     if voto == "branco":
         votos_brancos.append(voto)
         print("Voto computado! Obrigada por fazer seu papel de cidadão.\nO país agradece!")
-    elif voto == "encerrar votação":
-        encerrar_votacao()
     else:
         for candidato in candidatos:
             if voto == candidato["numero"] and candidato["cargo"] == "prefeita(o)":
@@ -129,14 +144,12 @@ def pegar_voto(voto):
                 return pegar_voto(voto)
 
 
-voto = input("Informe seu voto para a Prefeitura de São Paulo (dois dígitos ou 'branco', caso deseje votar em branco): ")
+while True:
+    voto = input("Informe seu voto para a Prefeitura de São Paulo (dois dígitos ou 'branco', caso deseje votar em branco): ")
 
-pegar_voto(voto)
+    if voto == "encerrar votação":
+        encerrar_votacao()
+        break
 
-"""
-7 - Coloque um comando 'encerrar votação' que finaliza a votação e exibe as informações abaixo:
-- Informar a quantidade de votos válidos, brancos e nulos;
-- Checar se o político mais votado possui mais de 50% dos votos ou se haverá segundo turno.
-- Caso tenha vencedor: Informar quem ganhou e qual a porcentagem de votos que ele teve;
-- Exibir na tela um político por linha, com a quantidade de votos recebidos e a porcentagem equivalente.
-"""
+    pegar_voto(voto)
+
